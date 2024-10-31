@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('resources', function (Blueprint $table) {
             $table->increments('id');
             $table->enum('type', ['photo', 'pdf', 'link']);
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('file_path')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('estimated_date')->nullable();
             $table->string('estimated_location', 255)->nullable();
             $table->enum('privacy_setting', ['public', 'private'])->default('public');
-            $table->unsignedInteger('gallery_id')->nullable();
+            $table->unsignedBigInteger('gallery_id')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->text('additional_info')->nullable();
             $table->string('copyright_info', 255)->nullable();
