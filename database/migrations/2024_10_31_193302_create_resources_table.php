@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('estimated_date')->nullable();
             $table->string('estimated_location', 255)->nullable();
             $table->enum('privacy_setting', ['public', 'private'])->default('public');
-            $table->unsignedBigInteger('gallery_id')->nullable();
+            $table->unsignedInteger('gallery_id')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->text('additional_info')->nullable();
             $table->string('copyright_info', 255)->nullable();
