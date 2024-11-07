@@ -5,16 +5,17 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\Category;
 
 class CategoryTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
+    use RefreshDatabase;
+
+    public function test_categories_link_screen_can_be_rendered(): void
     {
-        $response = $this->get('/');
+        $response = $this->get('/categories');
 
         $response->assertStatus(200);
     }
+
 }
