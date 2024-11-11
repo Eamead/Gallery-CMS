@@ -38,7 +38,7 @@ class CategoryTest extends TestCase
         }
     }
 
-    public function only_admins_can_create_categories()
+    public function test_only_admins_can_create_categories()
     {
         // Create a regular user and an admin user
         $user = User::factory()->create(['role' => 'user']);
