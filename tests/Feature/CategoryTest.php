@@ -38,4 +38,34 @@ class CategoryTest extends TestCase
         }
     }
 
+    public function only_admins_can_create_categories()
+    {
+        // Create a regular user and an admin user
+        $user = User::factory()->create(['role' => 'user']);
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $categoryData = [
+            'name' => 'New Category',
+            'description' => 'Category Description',
+        ];
+
+        // Regular user cannot create category
+        $this->actingAs($user)
+            ->post('/categories', $categoryData)
+            ->assertStatus(403); // Forbidden
+
+        // Guest cannot create category
+        $this->post('/categories', $categoryData)
+            ->assertRedirect('/login');
+
+        // Admin can create category
+        $this->actingAs($admin)
+            ->post('/categories', $categoryData)
+            ->assertStatus(302) // Redirect after successful creation
+            ->assertRedirect('/categories');
+
+        // Category exists in database
+        $this->assertDatabaseHas('categories', ['name' => 'New Category']);
+    }
+
 }
