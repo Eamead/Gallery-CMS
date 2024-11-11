@@ -18,4 +18,11 @@ class CategoryTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_categories_can_be_created(): void
+    {
+        $categories = Category::factory()->count(3)->create();
+
+        $this->assertDatabaseCount('categories', 3);
+    }
+
 }
