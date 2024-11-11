@@ -69,4 +69,29 @@ class CategoryTest extends TestCase
         $this->assertDatabaseHas('categories', ['name' => 'New Category']);
     }
 
+    public function test_only_admins_can_delete_categories()
+    {
+        // Create a category and users
+        $category = Category::factory()->create();
+        $user = User::factory()->create(['role' => 'user']);
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        // Regular user cannot delete category
+        $this->actingAs($user)
+            ->delete("/categories/{$category->id}")
+            ->assertStatus(403);
+
+        // Guest cannot delete category
+        $this->delete("/categories/{$category->id}")
+            ->assertStatus(403); // Forbidden
+
+        // Admin can delete category
+        $this->actingAs($admin)
+            ->delete("/categories/{$category->id}")
+            ->assertRedirect('/categories');
+
+        // Category does not exist in database
+        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+    }
+
 }
