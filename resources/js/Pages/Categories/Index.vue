@@ -41,62 +41,68 @@
             </div>
         </div>
 
-        <!-- Floating Button -->
-        <button
-            @click="openModal"
-            class="fixed bottom-6 right-6 bg-blue-500 text-white rounded-full p-4 shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 px-6"
-            aria-label="Create New Category"
-        >
-            +
-        </button>
-
-        <!-- Modal -->
-        <div
-            v-if="isModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-        >
-            <div
-                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-11/12 max-w-md p-6 relative"
+        <div v-if="isAdmin">
+            <!-- Floating Button -->
+            <button
+                @click="openModal"
+                class="fixed bottom-6 right-6 bg-blue-500 text-white rounded-full p-4 shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 px-6"
+                aria-label="Create New Category"
             >
-                <button
-                    @click="closeModal"
-                    class="absolute top-3 right-3 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none"
-                    aria-label="Close Modal"
-                >
-                    &times;
-                </button>
-                <h2 class="text-xl font-semibold mb-4">Create New Category</h2>
-                <form @submit.prevent="createCategory">
-                    <input
-                        v-model="form.name"
-                        type="text"
-                        placeholder="Category Name"
-                        class="border p-2 mb-2 w-full rounded"
-                        required
-                    />
-                    <textarea
-                        v-model="form.description"
-                        placeholder="Description"
-                        class="border p-2 mb-2 w-full rounded"
-                    ></textarea>
-                    <button
-                        type="submit"
-                        class="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600"
-                    >
-                        Create
-                    </button>
-                </form>
+                +
+            </button>
 
+            <!-- Modal -->
+            <div
+                v-if="isModalOpen"
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            >
                 <div
-                    v-if="form.errors.name || form.errors.description"
-                    class="text-red-500 mt-2"
+                    class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-11/12 max-w-md p-6 relative"
                 >
-                    <ul>
-                        <li v-if="form.errors.name">{{ form.errors.name }}</li>
-                        <li v-if="form.errors.description">
-                            {{ form.errors.description }}
-                        </li>
-                    </ul>
+                    <button
+                        @click="closeModal"
+                        class="absolute top-3 right-3 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none"
+                        aria-label="Close Modal"
+                    >
+                        &times;
+                    </button>
+                    <h2 class="text-xl font-semibold mb-4">
+                        Create New Category
+                    </h2>
+                    <form @submit.prevent="createCategory">
+                        <input
+                            v-model="form.name"
+                            type="text"
+                            placeholder="Category Name"
+                            class="border p-2 mb-2 w-full rounded"
+                            required
+                        />
+                        <textarea
+                            v-model="form.description"
+                            placeholder="Description"
+                            class="border p-2 mb-2 w-full rounded"
+                        ></textarea>
+                        <button
+                            type="submit"
+                            class="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600"
+                        >
+                            Create
+                        </button>
+                    </form>
+
+                    <div
+                        v-if="form.errors.name || form.errors.description"
+                        class="text-red-500 mt-2"
+                    >
+                        <ul>
+                            <li v-if="form.errors.name">
+                                {{ form.errors.name }}
+                            </li>
+                            <li v-if="form.errors.description">
+                                {{ form.errors.description }}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -114,7 +120,7 @@ export default {
         categories: Array,
         isAdmin: Boolean,
     },
-    setup() {
+    setup(props) {
         const form = useForm({
             name: "",
             description: "",
@@ -146,6 +152,7 @@ export default {
             openModal,
             closeModal,
             createCategory,
+            isAdmin: props.isAdmin,
         };
     },
 };
