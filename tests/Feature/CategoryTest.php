@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Category;
+use App\Models\User;
 
 class CategoryTest extends TestCase
 {
@@ -56,7 +57,7 @@ class CategoryTest extends TestCase
 
         // Guest cannot create category
         $this->post('/categories', $categoryData)
-            ->assertRedirect('/login');
+            ->assertStatus(403); // Forbidden
 
         // Admin can create category
         $this->actingAs($admin)
