@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
-Route::middleware(['auth', 'can:manage-categories'])->group(function () {
+Route::middleware(['auth', 'can:manage,App\Models\Category'])->group(function () {
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
