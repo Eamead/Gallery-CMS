@@ -15,6 +15,19 @@ class CategoryController extends Controller
         return Inertia::render('Categories/Index', [
             'status' => session('status'),
             'categories' => $categories,
+            'isAdmin' => auth()->check() && auth()->user()->role === 'admin',
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|unique:categories,name',
+            'description' => 'nullable',
+        ]);
+
+        Category::create($validated);
+
+        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 }
