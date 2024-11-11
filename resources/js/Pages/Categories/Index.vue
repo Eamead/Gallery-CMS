@@ -26,7 +26,14 @@
                                     <p
                                         class="text-sm font-semibold text-gray-900"
                                     >
-                                        {{ category.name }}
+                                        <span>{{ category.name }}</span>
+                                        <button
+                                            v-if="isAdmin"
+                                            @click="deleteCategory(category.id)"
+                                            class="text-red-500"
+                                        >
+                                            Delete
+                                        </button>
                                     </p>
                                     <p
                                         class="mt-1 truncate text-xs text-gray-500"
@@ -71,14 +78,14 @@
                     </h2>
                     <form @submit.prevent="createCategory">
                         <input
-                            v-model="form.name"
+                            v-model="createForm.name"
                             type="text"
                             placeholder="Category Name"
                             class="border p-2 mb-2 w-full rounded"
                             required
                         />
                         <textarea
-                            v-model="form.description"
+                            v-model="createForm.description"
                             placeholder="Description"
                             class="border p-2 mb-2 w-full rounded"
                         ></textarea>
@@ -91,15 +98,15 @@
                     </form>
 
                     <div
-                        v-if="form.errors.name || form.errors.description"
+                        v-if="createForm.errors.name || createForm.errors.description"
                         class="text-red-500 mt-2"
                     >
                         <ul>
-                            <li v-if="form.errors.name">
-                                {{ form.errors.name }}
+                            <li v-if="createForm.errors.name">
+                                {{ createForm.errors.name }}
                             </li>
-                            <li v-if="form.errors.description">
-                                {{ form.errors.description }}
+                            <li v-if="createForm.errors.description">
+                                {{ createForm.errors.description }}
                             </li>
                         </ul>
                     </div>
@@ -110,7 +117,7 @@
 </template>
 
 <script>
-import { Head, useForm } from "@inertiajs/vue3";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 
@@ -121,7 +128,7 @@ export default {
         isAdmin: Boolean,
     },
     setup(props) {
-        const form = useForm({
+        const createForm = useForm({
             name: "",
             description: "",
         });
@@ -134,24 +141,35 @@ export default {
 
         const closeModal = () => {
             isModalOpen.value = false;
-            form.reset();
+            createForm.reset();
         };
 
         const createCategory = () => {
-            form.post(route("categories.store"), {
+            createForm.post(route("categories.store"), {
                 onSuccess: () => {
-                    form.reset();
+                    createForm.reset();
                     isModalOpen.value = false;
                 },
             });
         };
 
+        const deleteCategory = (id) => {
+            if (confirm('Are you sure you want to delete this category?')) {
+                router.delete(route("categories.destroy", { category: id }), {
+                    onSuccess: () => {
+                        
+                    },
+                });
+            }
+        };
+
         return {
-            form,
+            createForm,
             isModalOpen,
             openModal,
             closeModal,
             createCategory,
+            deleteCategory,
             isAdmin: props.isAdmin,
         };
     },
