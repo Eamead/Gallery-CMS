@@ -25,4 +25,17 @@ class CategoryTest extends TestCase
         $this->assertDatabaseCount('categories', 3);
     }
 
+    public function test_categories_have_correct_attributes(): void
+    {
+        $categories = Category::factory()->count(3)->create();
+
+        foreach ($categories as $category) {
+            $this->assertDatabaseHas('categories', [
+                'id' => $category->id,
+                'name' => $category->name,
+                'description' => $category->description,
+            ]);
+        }
+    }
+
 }
